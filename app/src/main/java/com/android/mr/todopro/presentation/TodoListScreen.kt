@@ -41,7 +41,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.android.mr.todopro.data.TodoItem
+import com.android.mr.todopro.domain.TodoItem
 
 /**
  * Scaffold + TopAppBar + FAB

@@ -1,15 +1,15 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+
+    // For ksp
+    alias(libs.plugins.ksp)
 }
 
 android {
     namespace = "com.android.mr.todopro"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.android.mr.todopro"
@@ -31,8 +31,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
     buildFeatures {
         compose = true
@@ -46,8 +46,8 @@ dependencies {
     // Activity and ViewModel
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.10.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.10.0")
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
 
     // Compose BOM — one version controls all Compose libs
     implementation(platform(libs.androidx.compose.bom))
@@ -58,6 +58,12 @@ dependencies {
 
     // Navigation
     implementation(libs.androidx.navigation.compose)
+
+    // ROOM DB
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)      // Adds Flow support
+    ksp(libs.androidx.room.compiler)            // Code generation
+
 
     // Testing
     testImplementation(libs.junit)

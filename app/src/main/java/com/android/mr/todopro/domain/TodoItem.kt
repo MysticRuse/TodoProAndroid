@@ -1,4 +1,4 @@
-package com.android.mr.todopro.data
+package com.android.mr.todopro.domain
 
 data class TodoItem (
     val id: Int,

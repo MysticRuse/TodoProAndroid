@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
@@ -35,7 +36,7 @@ class MainActivity : ComponentActivity() {
                 // Create View Model ONCE here - scoped to Activity.
                 // Both screens will receive same instance
                 val viewModel: TodoViewModel = viewModel(
-                     factory = TodoViewModel.factory(this)
+                     factory = TodoViewModel.factory(LocalContext.current)
                 )
 
                 val navController = rememberNavController()
