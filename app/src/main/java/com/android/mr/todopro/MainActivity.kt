@@ -15,9 +15,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.android.mr.todopro.presentation.TodoDetailScreen
-import com.android.mr.todopro.presentation.TodoListScreen
-import com.android.mr.todopro.presentation.TodoViewModel
+import com.android.mr.todopro.presentation.detail.TodoDetailScreen
+import com.android.mr.todopro.presentation.list.TodoListScreen
+import com.android.mr.todopro.presentation.list.TodoViewModel
 import com.android.mr.todopro.ui.theme.TodoProTheme
 
 class MainActivity : ComponentActivity() {

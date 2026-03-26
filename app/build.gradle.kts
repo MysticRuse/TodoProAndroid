@@ -5,6 +5,9 @@ plugins {
 
     // For ksp
     alias(libs.plugins.ksp)
+
+    // Kotlin serialization plugin
+    kotlin("plugin.serialization")
 }
 
 android {
@@ -33,6 +36,9 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
+    }
+    kotlin {
+        jvmToolchain(21)
     }
     buildFeatures {
         compose = true
@@ -64,6 +70,11 @@ dependencies {
     implementation(libs.androidx.room.ktx)      // Adds Flow support
     ksp(libs.androidx.room.compiler)            // Code generation
 
+    // Retrofit - Network Lib
+    implementation(libs.retrofit)
+    implementation(libs.converter.kotlinx.serialization)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.logging.interceptor)
 
     // Testing
     testImplementation(libs.junit)

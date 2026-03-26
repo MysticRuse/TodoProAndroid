@@ -1,4 +1,4 @@
-package com.android.mr.todopro.presentation
+package com.android.mr.todopro.presentation.list
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -30,7 +31,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -42,12 +45,16 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.android.mr.todopro.domain.TodoItem
+import com.android.mr.todopro.util.UserSession
 
 /**
  * Scaffold + TopAppBar + FAB
  * Wrap TodoListScreen in a Scaffold.
  *
  */
+
+val userId = UserSession.CURRENT_USER_ID
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TodoListScreen(
@@ -55,6 +62,24 @@ fun TodoListScreen(
     onItemClick: (Int) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    // The following ensures that the UI "jumps" to show the user their newly created task immediately.
+    //=========================================================================================
+    // This object allows us to programmatically control the scroll position of the LazyColumn.
+    // Add this as state in LazyColumn(state = listState, ...)
+    val listState = rememberLazyListState()
+
+    // Track previous size to only scroll when a new item is added.
+    var previousSize by remember { mutableIntStateOf(uiState.items.size) }
+
+    // LaunchedEffect triggers whenever uiState.items.size changes.
+    LaunchedEffect(key1 = uiState.items.size) {
+        if (uiState.items.size > previousSize) {
+            listState.animateScrollToItem(0)
+        }
+        previousSize = uiState.items.size
+    }
+    //=========================================================================================
 
     Scaffold(
         topBar = {
@@ -89,7 +114,10 @@ fun TodoListScreen(
                     imeAction = ImeAction.Done
                 )
             )
-            LazyColumn(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            LazyColumn(
+                state = listState,
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
                 items(uiState.items, key = { it.id }) { item ->
                     TodoRow(
                         item = item,
@@ -169,7 +197,8 @@ fun TodoListScreenPhase1Step3(
             Spacer(modifier = Modifier.height(16.dp))
 
             // LazyColumn
-            LazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 items(uiState.items, key = { it.id }) { item ->
                     TodoRowPhase1Step2Step3(
                         item = item,
@@ -190,9 +219,9 @@ fun TodoAppScreenPhase1Step2NoViewModel() {
     var items by remember {
         mutableStateOf(
             listOf(
-                TodoItem(1, "Buy groceries"),
-                TodoItem(2, "Read Compose Docs"),
-                TodoItem(3, "Complete Kotlin Crash Course"),
+                TodoItem(1, userId, "Buy groceries"),
+                TodoItem(2, userId, "Read Compose Docs"),
+                TodoItem(3, userId = 5, "Complete Kotlin Crash Course"),
             )
         )
     }
@@ -218,6 +247,7 @@ fun TodoAppScreenPhase1Step2NoViewModel() {
                     if (newItemText.isNotBlank()) {
                         items = items + TodoItem(
                             id = items.size + 1,
+                            userId = userId,
                             text = newItemText
                         )
                         newItemText = ""
@@ -299,9 +329,9 @@ fun TodoRowPhase1Step1(item: TodoItem) {
 fun TodoAppPhase1Step1() {
     // Note: Hardcoded - replace with ViewModel
     val items = listOf(
-        TodoItem(1, "Buy groceries"),
-        TodoItem(2, "Read Compose Docs"),
-        TodoItem(3, "Complete Kotlin Crash Course"),
+        TodoItem(1, userId, "Buy groceries"),
+        TodoItem(2, userId, "Read Compose Docs"),
+        TodoItem(3, userId, "Complete Kotlin Crash Course"),
     )
 
     // ListView of items with LazyColumn

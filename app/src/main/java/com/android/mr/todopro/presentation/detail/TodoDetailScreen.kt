@@ -1,4 +1,4 @@
-package com.android.mr.todopro.presentation
+package com.android.mr.todopro.presentation.detail
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,7 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.android.mr.todopro.presentation.list.TodoViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

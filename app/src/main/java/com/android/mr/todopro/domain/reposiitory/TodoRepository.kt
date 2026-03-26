@@ -9,4 +9,5 @@ interface TodoRepository {
     suspend fun addTodo(text: String)
     suspend fun toggleTodo(id: Int)
     suspend fun deleteTodo(id: Int)
+    suspend fun syncWithServer(): Boolean
 }
